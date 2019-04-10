@@ -123,6 +123,7 @@ final class Analog_Templates {
 		if ( $beta_enabled ) {
 			require_once ANG_PLUGIN_DIR . 'inc/elementor/class-typography.php';
 			require_once ANG_PLUGIN_DIR . 'inc/elementor/class-post-type.php';
+			require_once ANG_PLUGIN_DIR . 'inc/elementor/class-design-system.php';
 		}
 	}
 
