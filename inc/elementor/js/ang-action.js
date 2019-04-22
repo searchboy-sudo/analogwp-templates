@@ -398,4 +398,49 @@ jQuery( window ).on( 'elementor:init', function() {
 			}
 		} );
 	} );
+
+	elementor.on( 'preview:loaded', function() {
+		elementor.getPanelView().addPage( 'analogwp', {
+			view: AnalogWPView,
+			title: 'AnalogWP',
+		} );
+	} );
+
+	const AnalogWPView = Marionette.LayoutView.extend( {
+		template: '#tmpl-ang-design-system',
+		currentTab: null,
+
+		initialize: function() {
+			this.initRegionViews();
+		},
+
+		initRegionViews: function() {
+			this.regionViews = {
+				angStyles: {
+					view: function() {
+						console.log( 'got heere bitches!' );
+						return 'ANGVIEW';
+					},
+				},
+			};
+		},
+
+		showView: function( viewName ) {
+			const viewDetails = this.regionViews[ viewName ],
+				options = viewDetails.options || {},
+				View = viewDetails.view();
+
+			if ( this.currentTab && this.currentTab.constructor === View ) {
+				return;
+			}
+
+			this.currentTab = new View( options );
+
+			this.content.show( this.currentTab );
+		},
+
+		onRender: function() {
+			this.showView( 'angStyles' );
+		},
+	} );
 } );
