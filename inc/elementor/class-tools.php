@@ -42,6 +42,9 @@ class Tools extends Base {
 			add_action( 'wp_ajax_analog_style_kit_export', [ $this, 'handle_style_kit_export' ] );
 			add_action( 'wp_ajax_analog_style_kit_import', [ $this, 'handle_style_kit_import' ] );
 
+			// Send Stylekit values to Customizer.
+			add_action( 'wp_ajax_analog_style_kit_customizer_export', [ $this, 'handle_style_kit_customizer_export' ] );
+
 			// Template library bulk actions.
 			add_filter( 'bulk_actions-edit-ang_tokens', [ $this, 'admin_add_bulk_export_action' ] );
 			add_filter( 'handle_bulk_actions-edit-ang_tokens', [ $this, 'admin_export_multiple_templates' ], 10, 3 );
@@ -132,6 +135,27 @@ CSS;
 	}
 
 	/**
+	 * Get StyleKit values export link.
+	 *
+	 * Retrieve the link used to send a single stylekit values based on the template
+	 * ID.
+	 *
+	 * @access private
+	 * @param int $kit_id The template ID.
+	 * @return string Template export URL.
+	 */
+	private function get_customizer_export_link( $kit_id ) {
+		return add_query_arg(
+			[
+				'action' => 'analog_style_kit_customizer_export',
+				'_nonce' => wp_create_nonce( 'analog_ajax' ),
+				'kit_id' => $kit_id,
+			],
+			admin_url( 'admin-ajax.php' )
+		);
+	}
+
+	/**
 	 * Post row actions.
 	 *
 	 * Add an export link to the template library action links table list.
@@ -148,6 +172,7 @@ CSS;
 	public function post_row_actions( $actions, WP_Post $post ) {
 		if ( self::is_tokens_screen() ) {
 			$actions['export-template'] = sprintf( '<a href="%1$s">%2$s</a>', $this->get_export_link( $post->ID ), __( 'Export Style Kit', 'ang' ) );
+			$actions['export-stylekit-customizer'] = sprintf( '<a href="%1$s">%2$s</a>', $this->get_customizer_export_link( $post->ID ), __( 'Send to Customizer', 'ang' ) );
 		}
 		return $actions;
 	}
@@ -353,6 +378,93 @@ CSS;
 		$this->export_stylekit( $kit_id );
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * Prepare Style Kit values for Customizer export.
+	 *
+	 * Retrieve the relevant template data and return them as an array.
+	 *
+	 * @access private
+	 *
+	 * @param int $kit_id The template ID.
+	 * @return WP_Error|array Exported template data.
+	 */
+	private function prepare_kit_customizer_export( $kit_id ) {
+		$tokens = get_post_meta( $kit_id, '_tokens_data', true );
+
+		if ( empty( $tokens ) ) {
+			return new WP_Error( 'empty_kit', 'The Style Kit is empty' );
+		}
+
+		$kit_data = [];
+
+		$kit_data['content'] = $tokens;
+		$kit_data['title']   = get_the_title( $kit_id );
+
+		return json_decode( $kit_data['content'], true );
+	}
+
+	/**
+	 * Export local template Stylekit values.
+	 *
+	 * Export template to an array.
+	 *
+	 * @access public
+	 *
+	 * @param int $kit_id The Style Kit ID.
+	 * @return WP_Error WordPress error if template export failed.
+	 */
+	public function export_stylekit_customizer( $kit_id ) {
+		$file_data = $this->prepare_kit_customizer_export( $kit_id );
+
+		if ( is_wp_error( $file_data ) ) {
+			echo $file_data->get_error_message();
+			return;
+		}
+
+		// Output file contents.
+		// var_dump( $file_data );
+		// die;
+		return $file_data; // @codingStandardsIgnoreLine
+	}
+
+	/**
+	 * Handles sending Stylekit values to Customizer.
+	 */
+	public function handle_style_kit_customizer_export() {
+		$kit_id = $_REQUEST['kit_id'];
+
+		$values = $this->export_stylekit_customizer( $kit_id );
+
+		if ( defined( 'ASTRA_THEME_SETTINGS' ) ) {
+			$this->handle_astra_customizer_mapping( $values );
+		}
+	}
+
+	/**
+	 * @emptyComment.
+	 */
+	public function handle_astra_customizer_mapping( $values ) {
+		// var_dump( $values['ang_body_font_family'] );
+		set_theme_mod( 'astra-settings[body-font-family]', $values['ang_body_font_family'] );
+
+		$mods = [
+			ASTRA_THEME_SETTINGS . '[body-font-family]' => '',
+			ASTRA_THEME_SETTINGS . '[body-font-weight]' => '',
+			ASTRA_THEME_SETTINGS . '[body-text-transform]' => '',
+			ASTRA_THEME_SETTINGS . '[font-size-body]' => '',
+			ASTRA_THEME_SETTINGS . '[body-line-height]' => '',
+			ASTRA_THEME_SETTINGS . '[headings-font-family]' => '',
+			ASTRA_THEME_SETTINGS . '[headings-font-weight]' => '',
+			ASTRA_THEME_SETTINGS . '[headings-text-transform]' => '',
+			ASTRA_THEME_SETTINGS . '[font-size-h1]' => '',
+			ASTRA_THEME_SETTINGS . '[font-size-h2]' => '',
+			ASTRA_THEME_SETTINGS . '[font-size-h3]' => '',
+			ASTRA_THEME_SETTINGS . '[font-size-h4]' => '',
+			ASTRA_THEME_SETTINGS . '[font-size-h5]' => '',
+			ASTRA_THEME_SETTINGS . '[font-size-h6]' => '',
+		];
 	}
 
 	/**
