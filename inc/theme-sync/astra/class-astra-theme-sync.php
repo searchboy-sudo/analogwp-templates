@@ -31,6 +31,8 @@ class Astra_Theme_Sync extends Theme_Sync {
 	 * Add all actions and filters.
 	 */
 	public function add_actions() {
+		add_action( 'customize_register', [ $this, 'customizer_export' ] );
+
 		if ( is_admin() ) {
 			add_filter( 'post_row_actions', [ $this, 'post_row_actions' ], 10, 2 );
 
@@ -187,6 +189,90 @@ class Astra_Theme_Sync extends Theme_Sync {
 		];
 	}
 
+	/**
+	 * Register Customizer settings & controls for Customizer to Stylekits export.
+	 *
+	 * @param obj $wp_customize WP Customizer Object.
+	 * @return void
+	 */
+	public function customizer_export( $wp_customize ) {
+		$wp_customize->add_setting(
+			'analogwp-stylekits-selector',
+			array(
+				'default'           => 0,
+				'transport'         => 'postMessage',
+				'sanitize_callback' => '',
+			)
+		);
+
+		$wp_customize->add_control(
+			'analogwp-stylekits-selector',
+			array(
+				'label'       => __( 'Analog Stylekits', 'ang' ),
+				'description' => '<p>' . __( 'Click to export Customizer Typography to a Stylekit', 'ang' ) . '</p>',
+				'type'        => 'select',
+				'choices'     => $this->get_stylekits(),
+				'section'     => 'section-content-typo',
+				'priority'    => 1,
+			)
+		);
+
+		$wp_customize->add_setting(
+			'analogwp-export-customizer-vals-description',
+			array()
+		);
+
+		$wp_customize->add_control(
+			new \Astra_Control_Description(
+				$wp_customize,
+				'analogwp-export-customizer-vals-description',
+				array(
+					'label'    => '',
+					'type'     => 'ast-description',
+					'section'  => 'section-content-typo',
+					'help'     => __( 'Select which Stylekit to apply the current Customizer Typography values.', 'ang' ),
+					'priority' => 1,
+				)
+			)
+		);
+
+		$wp_customize->add_setting(
+			'analogwp-export-customizer-vals',
+			array()
+		);
+
+		$wp_customize->add_control(
+			new \Astra_Control_Description(
+				$wp_customize,
+				'analogwp-export-customizer-vals',
+				array(
+					'label'    => '',
+					'type'     => 'ast-description',
+					'section'  => 'section-content-typo',
+					'help'     => '<a id="analogwp-customizer-export" href="#" class="button button-primary"  target="_blank" rel="noopener">' . __( 'Send to Stylekit', 'ang' ) . '</a>',
+					'priority' => 1,
+				)
+			)
+		);
+
+		$wp_customize->add_setting(
+			'analogwp-export-customizer-vals-divider',
+			array()
+		);
+
+		$wp_customize->add_control(
+			new \Astra_Control_Divider(
+				$wp_customize,
+				'analogwp-export-customizer-vals-divider',
+				array(
+					'label'    => '',
+					'type'     => 'ast-divider',
+					'section'  => 'section-content-typo',
+					'priority' => 1,
+				)
+			)
+		);
+	}
 }
 
 new Astra_Theme_Sync();
