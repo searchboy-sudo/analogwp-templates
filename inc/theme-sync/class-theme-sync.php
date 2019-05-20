@@ -33,4 +33,33 @@ abstract class Theme_Sync {
 
 	abstract public function handle_stylekit_customizer_mapping( $values );
 
+	/**
+	 * Get the list of all Stylekits.
+	 *
+	 * @since @@
+	 * @return array List of Stylekits.
+	 */
+	public function get_stylekits() {
+		$defaults = array(
+			'post_type'             => 'ang_tokens',
+			'echo'                  => 0,
+			'depth'                 => 0,
+			'child_of'              => 0,
+			'nopaging'              => true,
+		);
+
+		$array_obj    = get_posts( $defaults );
+
+		$cpt_posts = json_decode( json_encode( $array_obj ), true );
+
+		$stylekits = array();
+		$stylekits[ 0 ] = __( '-- Select --', 'ang');
+
+		foreach ( $cpt_posts as $key => $value ) {
+			$stylekits[ $value['ID'] ] = $value['post_title'];
+		}
+
+		return $stylekits;
+	}
+
 }
