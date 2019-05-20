@@ -33,6 +33,8 @@ class Astra_Theme_Sync extends Theme_Sync {
 	public function add_actions() {
 		add_action( 'customize_register', [ $this, 'customizer_export' ] );
 
+		add_action( 'customize_controls_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+
 		if ( is_admin() ) {
 			add_filter( 'post_row_actions', [ $this, 'post_row_actions' ], 10, 2 );
 
@@ -45,7 +47,7 @@ class Astra_Theme_Sync extends Theme_Sync {
 	 * Enqueue scripts & styles.
 	 */
 	public function enqueue_scripts() {
-
+		wp_enqueue_script( 'analogwp-customizer-controls', ANG_PLUGIN_URL . 'inc/theme-sync/astra/customize-controls.js', [ 'jquery', 'customize-controls' ], filemtime( ANG_PLUGIN_DIR . 'inc/theme-sync/astra/customize-controls.js' ), true );
 	}
 
 	/**
@@ -260,7 +262,7 @@ class Astra_Theme_Sync extends Theme_Sync {
 					'label'    => '',
 					'type'     => 'ast-description',
 					'section'  => 'section-content-typo',
-					'help'     => '<a id="analogwp-customizer-export" href="#" class="button button-primary"  target="_blank" rel="noopener">' . __( 'Send to Stylekit', 'ang' ) . '</a>',
+					'help'     => '<a id="analogwp-customizer-export" href="#" class="button button-primary" rel="noopener">' . __( 'Send to Stylekit', 'ang' ) . '</a>',
 					'priority' => 1,
 				)
 			)
