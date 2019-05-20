@@ -54,7 +54,7 @@ class Astra_Theme_Sync extends Theme_Sync {
 	 * Retrieve the link used to send a single stylekit values based on the template
 	 * ID.
 	 *
-	 * @access private
+	 * @access public
 	 * @param int $kit_id The template ID.
 	 * @return string Template export URL.
 	 */
@@ -70,7 +70,18 @@ class Astra_Theme_Sync extends Theme_Sync {
 	}
 
 	/**
+	 * Post row actions.
 	 *
+	 * Add an export link to the template library action links table list.
+	 *
+	 * Fired by `post_row_actions` filter.
+	 *
+	 * @access public
+	 *
+	 * @param array   $actions An array of row action links.
+	 * @param WP_Post $post    The post object.
+	 *
+	 * @return array An updated array of row action links.
 	 */
 	public function post_row_actions( $actions, WP_Post $post ) {
 		if ( Tools::is_tokens_screen() ) {
@@ -84,7 +95,7 @@ class Astra_Theme_Sync extends Theme_Sync {
 	 *
 	 * Retrieve the relevant template data and return them as an array.
 	 *
-	 * @access private
+	 * @access public
 	 *
 	 * @param int $kit_id The template ID.
 	 * @return WP_Error|array Exported template data.

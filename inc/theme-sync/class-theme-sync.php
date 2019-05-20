@@ -41,19 +41,19 @@ abstract class Theme_Sync {
 	 */
 	public function get_stylekits() {
 		$defaults = array(
-			'post_type'             => 'ang_tokens',
-			'echo'                  => 0,
-			'depth'                 => 0,
-			'child_of'              => 0,
-			'nopaging'              => true,
+			'post_type' => 'ang_tokens',
+			'echo'      => 0,
+			'depth'     => 0,
+			'child_of'  => 0,
+			'nopaging'  => true,
 		);
 
-		$array_obj    = get_posts( $defaults );
+		$array_obj = get_posts( $defaults );
 
 		$cpt_posts = json_decode( json_encode( $array_obj ), true );
 
-		$stylekits = array();
-		$stylekits[ 0 ] = __( '-- Select --', 'ang');
+		$stylekits    = array();
+		$stylekits[0] = __( '-- Select --', 'ang' );
 
 		foreach ( $cpt_posts as $key => $value ) {
 			$stylekits[ $value['ID'] ] = $value['post_title'];
