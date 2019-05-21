@@ -297,6 +297,58 @@ class Astra_Theme_Sync extends Theme_Sync {
 	}
 
 	/**
+	 * Handles mapping of Customizer options to Stylekits token data array.
+	 *
+	 * @access public
+	 *
+	 * @since @@
+	 * @return array Stylekits token data array.
+	 */
+	public function customizer_stylekit_options_mapping( $data ) {
+		$token_data = array();
+
+		$token_data[ 'ang_body_typography' ] = 'custom';
+		foreach ( $data as $key => $value ) {
+			switch ( $value[0] ) {
+				case 'astra-settings[body-font-family]':
+					$token_data[ 'ang_body_font_family' ] = $value[1];
+					break;
+				case 'astra-settings[body-font-weight]':
+					$token_data[ 'ang_body_font_weight' ] = $value[1];
+					break;
+				case 'astra-settings[body-text-transform]':
+					$token_data[ 'ang_body_text_transform' ] = $value[1];
+					break;
+				default:
+					break;
+			}
+		}
+
+		return $token_data;
+	}
+
+	/**
+	 * Save data in Stylekit from Customizer export.
+	 *
+	 * @access public
+	 *
+	 * @since @@
+	 * @return bool
+	 */
+	public function customizer_stylekit_export( $data, $kit_id ) {
+
+		$token_data = $this->customizer_stylekit_options_mapping( $data );
+
+		var_dump( $token_data );
+
+		// Prepare tokens_data for update in post_meta.
+
+		$post_meta  = get_post_meta( $kit_id, '_tokens_data', true );
+
+		// var_dump( json_decode( $post_meta, true ) );
+	}
+
+	/**
 	 * Handles Customizer export ajax action.
 	 *
 	 * @access public
