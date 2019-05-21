@@ -35,6 +35,8 @@ class Astra_Theme_Sync extends Theme_Sync {
 
 		add_action( 'customize_controls_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
+		add_action( 'wp_ajax_analog_customizer_export_action', [ $this, 'handle_customizer_stylekit_export' ] );
+
 		if ( is_admin() ) {
 			add_filter( 'post_row_actions', [ $this, 'post_row_actions' ], 10, 2 );
 
@@ -48,6 +50,13 @@ class Astra_Theme_Sync extends Theme_Sync {
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'analogwp-customizer-controls', ANG_PLUGIN_URL . 'inc/theme-sync/astra/customize-controls.js', [ 'jquery', 'customize-controls' ], filemtime( ANG_PLUGIN_DIR . 'inc/theme-sync/astra/customize-controls.js' ), true );
+
+		$params = array(
+			'ajaxurl'    => admin_url( 'admin-ajax.php' ),
+			'ajax_nonce' => wp_create_nonce( 'analog_ajax' ),
+		);
+
+		wp_localize_script( 'analogwp-customizer-controls', 'ajax_object', $params );
 	}
 
 	/**
@@ -285,6 +294,30 @@ class Astra_Theme_Sync extends Theme_Sync {
 				)
 			)
 		);
+	}
+
+	/**
+	 * Handles Customizer export ajax action.
+	 *
+	 * @access public
+	 *
+	 * @since @@
+	 * @return void
+	 */
+	public function handle_customizer_stylekit_export() {
+		// Check nonce verification.
+		check_ajax_referer( 'analog_ajax', 'security' );
+
+		$data = wp_unslash( $_POST['data'] );
+
+		$data = json_decode( $data, true );
+
+		$kit_id = $_POST['kit_id'];
+
+		$this->customizer_stylekit_export( $data, $kit_id );
+		// var_dump( $data );
+
+		wp_die(); // this is required to terminate immediately and return a proper response
 	}
 }
 
