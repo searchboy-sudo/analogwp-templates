@@ -218,6 +218,16 @@ class Astra_Theme_Sync extends Theme_Sync {
 	 * @return void
 	 */
 	public function customizer_export( $wp_customize ) {
+
+		// Creates a section for Analog Stylekit.
+		$wp_customize->add_section(
+			'analogwp-stylekits-sync',
+			array(
+				'title'    => __( 'Analog Stylekit Sync', 'ang' ),
+				'priority' => 999,
+			)
+		);
+
 		$wp_customize->add_setting(
 			'analogwp-stylekits-selector',
 			array(
@@ -234,7 +244,7 @@ class Astra_Theme_Sync extends Theme_Sync {
 				'description' => '<p>' . __( 'Click to export Customizer Typography to a Stylekit', 'ang' ) . '</p>',
 				'type'        => 'select',
 				'choices'     => $this->get_stylekits(),
-				'section'     => 'section-content-typo',
+				'section'     => 'analogwp-stylekits-sync',
 				'priority'    => 1,
 			)
 		);
@@ -251,7 +261,7 @@ class Astra_Theme_Sync extends Theme_Sync {
 				array(
 					'label'    => '',
 					'type'     => 'ast-description',
-					'section'  => 'section-content-typo',
+					'section'  => 'analogwp-stylekits-sync',
 					'help'     => __( 'Select which Stylekit to apply the current Customizer Typography values.', 'ang' ),
 					'priority' => 1,
 				)
@@ -270,7 +280,7 @@ class Astra_Theme_Sync extends Theme_Sync {
 				array(
 					'label'    => '',
 					'type'     => 'ast-description',
-					'section'  => 'section-content-typo',
+					'section'  => 'analogwp-stylekits-sync',
 					'help'     => '<a id="analogwp-customizer-export" href="#" class="button button-primary" rel="noopener">' . __( 'Send to Stylekit', 'ang' ) . '</a>',
 					'priority' => 1,
 				)
@@ -289,7 +299,7 @@ class Astra_Theme_Sync extends Theme_Sync {
 				array(
 					'label'    => '',
 					'type'     => 'ast-divider',
-					'section'  => 'section-content-typo',
+					'section'  => 'analogwp-stylekits-sync',
 					'priority' => 1,
 				)
 			)
