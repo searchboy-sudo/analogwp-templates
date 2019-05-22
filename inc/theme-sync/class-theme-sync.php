@@ -50,7 +50,7 @@ abstract class Theme_Sync {
 
 		$array_obj = get_posts( $defaults );
 
-		$cpt_posts = json_decode( json_encode( $array_obj ), true );
+		$cpt_posts = json_decode( wp_json_encode( $array_obj ), true );
 
 		$stylekits    = array();
 		$stylekits[0] = __( '-- Select --', 'ang' );
