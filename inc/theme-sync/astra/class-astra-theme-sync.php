@@ -317,17 +317,41 @@ class Astra_Theme_Sync extends Theme_Sync {
 	public function customizer_stylekit_options_mapping( $data ) {
 		$token_data = array();
 
-		$token_data[ 'ang_body_typography' ] = 'custom';
+		$token_data['ang_body_typography'] = 'custom';
 		foreach ( $data as $key => $value ) {
 			switch ( $value[0] ) {
 				case 'astra-settings[body-font-family]':
-					$token_data[ 'ang_body_font_family' ] = $value[1];
+					$token_data['ang_body_font_family'] = $value[1];
 					break;
 				case 'astra-settings[body-font-weight]':
-					$token_data[ 'ang_body_font_weight' ] = $value[1];
+					$token_data['ang_body_font_weight'] = $value[1];
 					break;
 				case 'astra-settings[body-text-transform]':
-					$token_data[ 'ang_body_text_transform' ] = $value[1];
+					$token_data['ang_body_text_transform'] = $value[1];
+					break;
+				case 'astra-settings[body-line-height]':
+					$token_data['ang_body_line_height']['unit'] = 'em';
+					$token_data['ang_body_line_height']['size'] = (float) $value[1];
+					break;
+				case 'astra-settings[font-size-body]':
+					// Desktop.
+					$token_data['ang_body_font_size']['unit'] = $value[1]['desktop-unit'];
+					$token_data['ang_body_font_size']['size'] = $value[1]['desktop'];
+					// Tablet.
+					$token_data['ang_body_font_size_tablet']['unit'] = $value[1]['tablet-unit'];
+					$token_data['ang_body_font_size_tablet']['size'] = $value[1]['tablet'];
+					// Mobile.
+					$token_data['ang_body_font_size_mobile']['unit'] = $value[1]['mobile-unit'];
+					$token_data['ang_body_font_size_mobile']['size'] = $value[1]['mobile'];
+					break;
+				case 'astra-settings[headings-font-family]':
+					$token_data['ang_default_heading_font_family'] = $value[1];
+					break;
+				case 'astra-settings[headings-font-weight]':
+					$token_data['ang_default_heading_font_weight'] =  $value[1];
+					break;
+				case 'astra-settings[headings-text-transform]':
+					$token_data['ang_default_heading_text_transform'] = $value[1];
 					break;
 				default:
 					break;
@@ -349,13 +373,10 @@ class Astra_Theme_Sync extends Theme_Sync {
 
 		$token_data = $this->customizer_stylekit_options_mapping( $data );
 
-		var_dump( $token_data );
-
 		// Prepare tokens_data for update in post_meta.
+		$token_data = wp_json_encode( $token_data );
 
-		$post_meta  = get_post_meta( $kit_id, '_tokens_data', true );
-
-		// var_dump( json_decode( $post_meta, true ) );
+		$post_meta = update_post_meta( $kit_id, '_tokens_data', $token_data );
 	}
 
 	/**
@@ -377,9 +398,15 @@ class Astra_Theme_Sync extends Theme_Sync {
 		$kit_id = $_POST['kit_id'];
 
 		$this->customizer_stylekit_export( $data, $kit_id );
-		// var_dump( $data );
 
-		wp_die(); // this is required to terminate immediately and return a proper response
+		// To be further improvised.
+		if ( '0' !== $kit_id ) {
+			echo 'Data Saved!';
+		} else {
+			echo 'Please select a Stylekit!';
+		}
+
+		wp_die(); // This is required to terminate immediately and return a proper response.
 	}
 }
 
