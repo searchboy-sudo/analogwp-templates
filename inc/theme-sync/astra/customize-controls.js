@@ -16,7 +16,9 @@
 			} );
 
 			customize( 'astra-settings[body-font-family]', function( value ) {
-				window.ang_data[ 0 ] = [ value.id, value._value ];
+				let fontFamily = value._value.replace( /[^a-zA-Z, -]/g, '' );
+				fontFamily = fontFamily.split( ',' );
+				window.ang_data[ 0 ] = [ value.id, fontFamily[ 0 ] ];
 			} );
 
 			customize( 'astra-settings[body-font-weight]', function( value ) {
@@ -36,7 +38,9 @@
 			} );
 
 			customize( 'astra-settings[headings-font-family]', function( value ) {
-				window.ang_data[ 5 ] = [ value.id, value._value ];
+				let fontFamily = value._value.replace( /[^a-zA-Z, -]/g, '' );
+				fontFamily = fontFamily.split( ',' );
+				window.ang_data[ 5 ] = [ value.id, fontFamily[ 0 ] ];
 			} );
 
 			customize( 'astra-settings[headings-font-weight]', function( value ) {
@@ -80,13 +84,10 @@
 				'security' : window.ajax_object.ajax_nonce
 			};
 
-			// console.log( window.analogwp );
-
 			$.post( window.ajax_object.ajaxurl, data, function( response ) {
-				console.log( response );
+				alert( response );
 			} );
 
-			// console.log( 'Something Happened.' );
 		} );
 	} );
 }( jQuery ) );
