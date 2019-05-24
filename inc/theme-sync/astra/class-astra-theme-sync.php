@@ -348,7 +348,7 @@ class Astra_Theme_Sync extends Theme_Sync {
 					$token_data['ang_default_heading_font_family'] = $value[1];
 					break;
 				case 'astra-settings[headings-font-weight]':
-					$token_data['ang_default_heading_font_weight'] =  $value[1];
+					$token_data['ang_default_heading_font_weight'] = $value[1];
 					break;
 				case 'astra-settings[headings-text-transform]':
 					$token_data['ang_default_heading_text_transform'] = $value[1];
@@ -373,10 +373,14 @@ class Astra_Theme_Sync extends Theme_Sync {
 
 		$token_data = $this->customizer_stylekit_options_mapping( $data );
 
-		// Prepare tokens_data for update in post_meta.
-		$token_data = wp_json_encode( $token_data );
+		$post_meta = json_decode( get_post_meta( $kit_id, '_tokens_data', true ), true );
 
-		$post_meta = update_post_meta( $kit_id, '_tokens_data', $token_data );
+		// Prepare tokens_data for update in post_meta.
+		$tokens_data = array_merge( $post_meta, $token_data );
+
+		$tokens_data = wp_json_encode( $tokens_data );
+
+		return update_post_meta( $kit_id, '_tokens_data', $tokens_data );
 	}
 
 	/**
@@ -397,13 +401,13 @@ class Astra_Theme_Sync extends Theme_Sync {
 
 		$kit_id = $_POST['kit_id'];
 
-		$this->customizer_stylekit_export( $data, $kit_id );
+		$export_status = $this->customizer_stylekit_export( $data, $kit_id );
 
 		// To be further improvised.
-		if ( '0' !== $kit_id ) {
+		if ( '0' !== $kit_id && $export_status ) {
 			echo 'Data Saved!';
 		} else {
-			echo 'Please select a Stylekit!';
+			echo 'Failed to save!';
 		}
 
 		wp_die(); // This is required to terminate immediately and return a proper response.
