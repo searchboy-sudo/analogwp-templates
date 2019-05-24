@@ -150,65 +150,148 @@ class Astra_Theme_Sync extends Theme_Sync {
 
 	/**
 	 * Handles sending Stylekit values to Customizer.
+	 *
+	 * @return void
 	 */
 	public function handle_stylekit_customizer_export() {
 		$kit_id = $_REQUEST['kit_id'];
 
 		$values = $this->export_stylekit_customizer( $kit_id );
 
-		if ( defined( 'ASTRA_THEME_SETTINGS' ) ) {
-			$this->handle_stylekit_customizer_mapping( $values );
-		}
+		$this->handle_stylekit_customizer_mapping( $values );
 	}
 
 	/**
-	 * @emptyComment.
+	 * Handles Stylekit to Customizer final export mapping.
+	 *
+	 * @param array $values Customizer data.
+	 * @return void
 	 */
 	public function handle_stylekit_customizer_mapping( $values ) {
-		/**
-		 * Make switch case for family, weight, transform, size(responsive), line-height etc.
-		 */
 
 		$theme_options = get_option( 'astra-settings', [] );
 
-		$body_font_family = $values['ang_body_font_family'];
-		if ( $body_font_family !== $theme_options['body-font-family'] ) {
-			$theme_options['body-font-family'] = "'$body_font_family', sans-serif";
-		}
-
-		$body_font_weight = $values['ang_body_font_weight'];
-		if ( $body_font_weight !== $theme_options['body-font-weight'] ) {
-			$theme_options['body-font-weight'] = $body_font_weight;
-		}
-
-		$body_text_transform = $values['ang_body_text_transform'];
-		if ( $body_text_transform !== $theme_options['body-text-transform'] ) {
-			$theme_options['body-text-transform'] = $body_text_transform;
-		}
-
-		$body_size = $values['ang_body_text_transform'];
-		if ( $body_size !== $theme_options['body-size'] ) {
-			$theme_options['body-size'] = $body_size;
+		/**
+		 * Make switch case for family, weight, transform, size(responsive), line-height etc.
+		 */
+		foreach ( $values as $key => $value ) {
+			switch ( $key ) {
+				case 'ang_body_font_family':
+					$theme_options['body-font-family'] = "'$value', sans-serif";
+					break;
+				case 'ang_body_font_weight':
+					$theme_options['body-font-weight'] = $value;
+					break;
+				case 'ang_body_text_transform':
+					$theme_options['body-text-transform'] = $value;
+					break;
+				case 'ang_body_line_height':
+					$theme_options['body-line-height'] = $value;
+					break;
+				case 'ang_body_font_size':
+					$theme_options['font-size-body']['desktop-unit'] = $value['unit'];
+					$theme_options['font-size-body']['desktop']      = $value['size'];
+					break;
+				case 'ang_body_font_size_tablet':
+					$theme_options['font-size-body']['tablet-unit'] = $value['unit'];
+					$theme_options['font-size-body']['tablet']      = $value['size'];
+					break;
+				case 'ang_body_font_size_mobile':
+					$theme_options['font-size-body']['mobile-unit'] = $value['unit'];
+					$theme_options['font-size-body']['mobile']      = $value['size'];
+					break;
+				case 'ang_default_heading_font_family':
+					$theme_options['headings-font-family'] = "'$value', sans-serif";
+					break;
+				case 'ang_default_heading_font_weight':
+					$theme_options['headings-font-weight'] = $value;
+					break;
+				case 'ang_default_heading_text_transform':
+					$theme_options['headings-text-transform'] = $value;
+					break;
+				case 'ang_heading_1_font_size':
+					$theme_options['font-size-h1']['desktop-unit'] = $value['unit'];
+					$theme_options['font-size-h1']['desktop']      = $value['size'];
+					break;
+				case 'ang_heading_1_font_size_tablet':
+					$theme_options['font-size-h1']['tablet-unit'] = $value['unit'];
+					$theme_options['font-size-h1']['tablet']      = $value['size'];
+					break;
+				case 'ang_heading_1_font_size_mobile':
+					$theme_options['font-size-h1']['mobile-unit'] = $value['unit'];
+					$theme_options['font-size-h1']['mobile']      = $value['size'];
+					break;
+				case 'ang_heading_2_font_size':
+					$theme_options['font-size-h2']['desktop-unit'] = $value['unit'];
+					$theme_options['font-size-h2']['desktop']      = $value['size'];
+					break;
+				case 'ang_heading_2_font_size_tablet':
+					$theme_options['font-size-h2']['tablet-unit'] = $value['unit'];
+					$theme_options['font-size-h2']['tablet']      = $value['size'];
+					break;
+				case 'ang_heading_2_font_size_mobile':
+					$theme_options['font-size-h2']['mobile-unit'] = $value['unit'];
+					$theme_options['font-size-h2']['mobile']      = $value['size'];
+					break;
+				case 'ang_heading_3_font_size':
+					$theme_options['font-size-h3']['desktop-unit'] = $value['unit'];
+					$theme_options['font-size-h3']['desktop']      = $value['size'];
+					break;
+				case 'ang_heading_3_font_size_tablet':
+					$theme_options['font-size-h3']['tablet-unit'] = $value['unit'];
+					$theme_options['font-size-h3']['tablet']      = $value['size'];
+					break;
+				case 'ang_heading_3_font_size_mobile':
+					$theme_options['font-size-h3']['mobile-unit'] = $value['unit'];
+					$theme_options['font-size-h3']['mobile']      = $value['size'];
+					break;
+				case 'ang_heading_4_font_size':
+					$theme_options['font-size-h4']['desktop-unit'] = $value['unit'];
+					$theme_options['font-size-h4']['desktop']      = $value['size'];
+					break;
+				case 'ang_heading_4_font_size_tablet':
+					$theme_options['font-size-h4']['tablet-unit'] = $value['unit'];
+					$theme_options['font-size-h4']['tablet']      = $value['size'];
+					break;
+				case 'ang_heading_4_font_size_mobile':
+					$theme_options['font-size-h4']['mobile-unit'] = $value['unit'];
+					$theme_options['font-size-h4']['mobile']      = $value['size'];
+					break;
+				case 'ang_heading_5_font_size':
+					$theme_options['font-size-h5']['desktop-unit'] = $value['unit'];
+					$theme_options['font-size-h5']['desktop']      = $value['size'];
+					break;
+				case 'ang_heading_5_font_size_tablet':
+					$theme_options['font-size-h5']['tablet-unit'] = $value['unit'];
+					$theme_options['font-size-h5']['tablet']      = $value['size'];
+					break;
+				case 'ang_heading_5_font_size_mobile':
+					$theme_options['font-size-h5']['mobile-unit'] = $value['unit'];
+					$theme_options['font-size-h5']['mobile']      = $value['size'];
+					break;
+				case 'ang_heading_6_font_size':
+					$theme_options['font-size-h6']['desktop-unit'] = $value['unit'];
+					$theme_options['font-size-h6']['desktop']      = $value['size'];
+					break;
+				case 'ang_heading_6_font_size_tablet':
+					$theme_options['font-size-h6']['tablet-unit'] = $value['unit'];
+					$theme_options['font-size-h6']['tablet']      = $value['size'];
+					break;
+				case 'ang_heading_6_font_size_mobile':
+					$theme_options['font-size-h6']['mobile-unit'] = $value['unit'];
+					$theme_options['font-size-h6']['mobile']      = $value['size'];
+					break;
+				default:
+					break;
+			}
 		}
 
 		update_option( 'astra-settings', $theme_options );
 
-		$mods = [
-			ASTRA_THEME_SETTINGS . '[body-font-family]'    => '',
-			ASTRA_THEME_SETTINGS . '[body-font-weight]'    => '',
-			ASTRA_THEME_SETTINGS . '[body-text-transform]' => '',
-			ASTRA_THEME_SETTINGS . '[font-size-body]'      => '',
-			ASTRA_THEME_SETTINGS . '[body-line-height]'    => '',
-			ASTRA_THEME_SETTINGS . '[headings-font-family]' => '',
-			ASTRA_THEME_SETTINGS . '[headings-font-weight]' => '',
-			ASTRA_THEME_SETTINGS . '[headings-text-transform]' => '',
-			ASTRA_THEME_SETTINGS . '[font-size-h1]'        => '',
-			ASTRA_THEME_SETTINGS . '[font-size-h2]'        => '',
-			ASTRA_THEME_SETTINGS . '[font-size-h3]'        => '',
-			ASTRA_THEME_SETTINGS . '[font-size-h4]'        => '',
-			ASTRA_THEME_SETTINGS . '[font-size-h5]'        => '',
-			ASTRA_THEME_SETTINGS . '[font-size-h6]'        => '',
-		];
+		$message = new WP_Error( 'ang-success', __( 'Successfully sent to Customizer!', 'ang' ) );
+		if ( is_wp_error( $message ) ) {
+			wp_die( $message );
+		}
 	}
 
 	/**
