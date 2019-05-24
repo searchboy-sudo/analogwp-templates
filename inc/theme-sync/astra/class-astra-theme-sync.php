@@ -353,6 +353,72 @@ class Astra_Theme_Sync extends Theme_Sync {
 				case 'astra-settings[headings-text-transform]':
 					$token_data['ang_default_heading_text_transform'] = $value[1];
 					break;
+				case 'astra-settings[font-size-h1]':
+					// Desktop.
+					$token_data['ang_heading_1_font_size']['unit'] = $value[1]['desktop-unit'];
+					$token_data['ang_heading_1_font_size']['size'] = $value[1]['desktop'];
+					// Tablet.
+					$token_data['ang_heading_1_font_size_tablet']['unit'] = $value[1]['tablet-unit'];
+					$token_data['ang_heading_1_font_size_tablet']['size'] = $value[1]['tablet'];
+					// Mobile.
+					$token_data['ang_heading_1_font_size_mobile']['unit'] = $value[1]['mobile-unit'];
+					$token_data['ang_heading_1_font_size_mobile']['size'] = $value[1]['mobile'];
+					break;
+				case 'astra-settings[font-size-h2]':
+					// Desktop.
+					$token_data['ang_heading_2_font_size']['unit'] = $value[1]['desktop-unit'];
+					$token_data['ang_heading_2_font_size']['size'] = $value[1]['desktop'];
+					// Tablet.
+					$token_data['ang_heading_2_font_size_tablet']['unit'] = $value[1]['tablet-unit'];
+					$token_data['ang_heading_2_font_size_tablet']['size'] = $value[1]['tablet'];
+					// Mobile.
+					$token_data['ang_heading_2_font_size_mobile']['unit'] = $value[1]['mobile-unit'];
+					$token_data['ang_heading_2_font_size_mobile']['size'] = $value[1]['mobile'];
+					break;
+				case 'astra-settings[font-size-h3]':
+					// Desktop.
+					$token_data['ang_heading_3_font_size']['unit'] = $value[1]['desktop-unit'];
+					$token_data['ang_heading_3_font_size']['size'] = $value[1]['desktop'];
+					// Tablet.
+					$token_data['ang_heading_3_font_size_tablet']['unit'] = $value[1]['tablet-unit'];
+					$token_data['ang_heading_3_font_size_tablet']['size'] = $value[1]['tablet'];
+					// Mobile.
+					$token_data['ang_heading_3_font_size_mobile']['unit'] = $value[1]['mobile-unit'];
+					$token_data['ang_heading_3_font_size_mobile']['size'] = $value[1]['mobile'];
+					break;
+				case 'astra-settings[font-size-h4]':
+					// Desktop.
+					$token_data['ang_heading_4_font_size']['unit'] = $value[1]['desktop-unit'];
+					$token_data['ang_heading_4_font_size']['size'] = $value[1]['desktop'];
+					// Tablet.
+					$token_data['ang_heading_4_font_size_tablet']['unit'] = $value[1]['tablet-unit'];
+					$token_data['ang_heading_4_font_size_tablet']['size'] = $value[1]['tablet'];
+					// Mobile.
+					$token_data['ang_heading_4_font_size_mobile']['unit'] = $value[1]['mobile-unit'];
+					$token_data['ang_heading_4_font_size_mobile']['size'] = $value[1]['mobile'];
+					break;
+				case 'astra-settings[font-size-h5]':
+					// Desktop.
+					$token_data['ang_heading_5_font_size']['unit'] = $value[1]['desktop-unit'];
+					$token_data['ang_heading_5_font_size']['size'] = $value[1]['desktop'];
+					// Tablet.
+					$token_data['ang_heading_5_font_size_tablet']['unit'] = $value[1]['tablet-unit'];
+					$token_data['ang_heading_5_font_size_tablet']['size'] = $value[1]['tablet'];
+					// Mobile.
+					$token_data['ang_heading_5_font_size_mobile']['unit'] = $value[1]['mobile-unit'];
+					$token_data['ang_heading_5_font_size_mobile']['size'] = $value[1]['mobile'];
+					break;
+				case 'astra-settings[font-size-h6]':
+					// Desktop.
+					$token_data['ang_heading_6_font_size']['unit'] = $value[1]['desktop-unit'];
+					$token_data['ang_heading_6_font_size']['size'] = $value[1]['desktop'];
+					// Tablet.
+					$token_data['ang_heading_6_font_size_tablet']['unit'] = $value[1]['tablet-unit'];
+					$token_data['ang_heading_6_font_size_tablet']['size'] = $value[1]['tablet'];
+					// Mobile.
+					$token_data['ang_heading_6_font_size_mobile']['unit'] = $value[1]['mobile-unit'];
+					$token_data['ang_heading_6_font_size_mobile']['size'] = $value[1]['mobile'];
+					break;
 				default:
 					break;
 			}
