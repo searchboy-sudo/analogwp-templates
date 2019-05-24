@@ -24,6 +24,9 @@ class Astra_Theme_Sync extends Theme_Sync {
 	 * Initialize the class.
 	 */
 	public function __construct() {
+		if ( 'astra' !== get_stylesheet() ) {
+			return;
+		}
 		$this->add_actions();
 	}
 
