@@ -62,4 +62,20 @@ abstract class Theme_Sync {
 		return $stylekits;
 	}
 
+	/**
+	 * Stylekit export message for front-end.
+	 *
+	 * @param bool $status Theme options update status.
+	 * @return void
+	 */
+	public function get_stylekit_export_message( $status ) {
+		if ( $status ) {
+			$message = __( 'Successfully sent to Customizer!', 'ang' );
+		} else {
+			$message = __( 'Failed to send to Customizer!', 'ang' );
+		}
+
+		wp_die( $message );
+	}
+
 }

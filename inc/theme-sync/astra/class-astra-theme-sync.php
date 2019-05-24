@@ -289,12 +289,8 @@ class Astra_Theme_Sync extends Theme_Sync {
 			}
 		}
 
-		update_option( 'astra-settings', $theme_options );
-
-		$message = new WP_Error( 'ang-success', __( 'Successfully sent to Customizer!', 'ang' ) );
-		if ( is_wp_error( $message ) ) {
-			wp_die( $message );
-		}
+		$update_status = update_option( 'astra-settings', $theme_options );
+		$this->get_stylekit_export_message( $update_status );
 	}
 
 	/**
